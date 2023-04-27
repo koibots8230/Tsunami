@@ -1,4 +1,4 @@
-# app
+# frc_dashboard
 
 A new Flutter project.
 
