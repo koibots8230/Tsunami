@@ -13,6 +13,7 @@ Cargo.lock
 # MSVC Windows builds of rustc generate these, which store debugging information
 *.pdb
 
+
 # This gitignore has been specially created by the WPILib team.
 # If you remove items from this file, intellisense might break.
 
