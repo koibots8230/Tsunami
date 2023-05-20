@@ -1,36 +1,46 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import Greet from "./components/Greet.vue";
+  import TabButton from './components/TabButton.vue';
+  import Viewport from './components/Viewport.vue';
 </script>
 
 <template>
-  <div class="container">
-    <h1>Welcome to Tauri!</h1>
-
-    <div class="row">
-      <a href="https://vitejs.dev" target="_blank">
-        <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-      </a>
-      <a href="https://tauri.app" target="_blank">
-        <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-      </a>
-      <a href="https://vuejs.org/" target="_blank">
-        <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-      </a>
+  <header>
+    <TabButton :title='Constants' :run="component='Constants'"></TabButton>
+    <TabButton :title='Hardware' :run="component='Hardware'"></TabButton>
+    <TabButton :title='Telemetry' :run="component='Telemetry'"></TabButton>
+  </header>
+  
+  <main>
+    <div id="tab-window">
+      <KeepAlive> 
+        <component :is="component" />
+      </KeepAlive>
     </div>
-    <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
-    <br>
-    <Greet />
-  </div>
+  </main>
+
+  <aside>
+    <Viewport></Viewport>
+  </aside>
+  <footer>
+
+  </footer>
 </template>
 
-<style scoped>
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #249b73);
-}
-</style>
+<script lang="ts">
+import Constants from './components/tabs/Constants.vue';
+import Hardware from './components/tabs/Hardware.vue';
+import Telemetry from './components/tabs/Telemetry.vue';
+export default {
+  name: "tab-window",
+  components: {
+    Constants,
+    Hardware,
+    Telemetry
+  },
+  data() {
+    return {
+      component: "Constants",
+    };
+  },
+};
+</script>

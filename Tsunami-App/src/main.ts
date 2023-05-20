@@ -4,6 +4,7 @@ import Tsunami from "./Tsunami.vue";
 
 let i = 0;
 const app: App = createApp(Tsunami)
+
 setInterval(() => {
     console.log(i);
     i++;
