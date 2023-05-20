@@ -1,3 +1,10 @@
+$background-primary: #233272;
+$background-secondary: #3e5492;
+
+$primary-accent: #15346a;
+$secondary-accent: #70b3cd;
+$tertiary-accent: #1cc6e2;
+
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -13,16 +20,11 @@
   -webkit-text-size-adjust: 100%;
 
   color: #ffffff;
-  background-color: var(--background-primary);
+  background-color: $background-primary;
 
-  --background-primary: #233272;
-  --background-secondary: #3e5492;
 
-  --primary-accent: #15346a;
-  --secondary-accent: #70b3cd;
-  --tertiary-accent: #1cc6e2;
 }
 
 header {
-  background-color: var(--background-secondary);
+  background-color: $background-secondary;
 }

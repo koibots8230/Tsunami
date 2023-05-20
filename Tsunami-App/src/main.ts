@@ -1,5 +1,5 @@
 import {App, createApp} from "vue";
-import "./styles.css";
+import "./styles/main.scss";
 import Tsunami from "./Tsunami.vue";
 
 let i = 0;
