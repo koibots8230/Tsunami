@@ -1,15 +1,15 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::error::Error;
+use std::{error::Error, sync::Mutex};
 
 use confy::{load, store};
 use ds::{DriverStation, Alliance};
 use serde_derive::{Serialize, Deserialize};
 use tauri::{Menu, Manager};
 
-static mut SETTINGS: Option<TsunamiConfig> = None;
-static mut DRIVER_STATION: Option<DriverStation> = None;
+struct DS(Mutex<DriverStation>);
+struct Settings(Mutex<TsunamiConfig>);
 
 #[derive(Debug, Serialize, Deserialize)]
 struct TsunamiConfig {
@@ -26,20 +26,19 @@ impl Default for TsunamiConfig {
     }
 }
 
+#[tauri::command]
+fn enable(ds: tauri::State<'_, DS>) -> () {
+    let _ = &ds.0.lock().unwrap().enable();
+}
+
+#[tauri::command]
+fn save_settings(cfg: tauri::State<Settings>) -> () {
+    let _ = store("Tsunami", "Global", cfg.0.lock().as_deref().unwrap().to_owned());
+
+    
+} 
 
 fn try_main() -> Result<(), Box<dyn Error>> {
-
-    unsafe { 
-        SETTINGS = load("Tsunami", "Global")?;
-        DRIVER_STATION = Some(DriverStation::new_team(
-            SETTINGS.as_ref().unwrap().team_number,
-            if SETTINGS.as_ref().unwrap().alliance / 3 == 1 {
-                Alliance::new_blue(SETTINGS.as_ref().unwrap().alliance % 3)
-            } else {
-                Alliance::new_red(SETTINGS.as_ref().unwrap().alliance % 3)
-            }));
-    }
-
     let menu: Menu = Menu::os_default("Tsunami");
 
     tauri::Builder::default()
@@ -68,16 +67,15 @@ fn try_main() -> Result<(), Box<dyn Error>> {
 
             Ok(())
         })
+        .manage(DS(Mutex::new(DriverStation::new("172.0.0.1", Alliance(1), 8230))))
+        .manage(Settings(load("Tsunami", "Global")?))
         .invoke_handler(tauri::generate_handler![
             // Add tauri commands here.
-
+            enable,
+            save_settings,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
-
-        unsafe {
-             store("Tsunami", "Global", SETTINGS.as_ref().unwrap())?;
-        }
 
     Ok(())
 }
