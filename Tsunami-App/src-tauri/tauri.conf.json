@@ -13,6 +13,11 @@
   "tauri": {
     "allowlist": {
       "all": false,
+      "app": {
+        "all": true,
+        "show": true,
+        "hide": true
+      },
       "shell": {
         "all": false,
         "open": true
@@ -23,7 +28,13 @@
         "confirm": true,
         "message": true, 
         "open": true,
-        "save": true 
+        "save": true
+      },
+      "os": {
+        "all": true
+      },
+      "path": {
+        "all": true
       }
     },
     "bundle": {
@@ -37,6 +48,18 @@
       ],
       "identifier": "com.koibots.tsunami",
       "targets": "all"
+    },
+    "cli": {
+      "description": "",
+      "longDescription": "",
+      "beforeHelp": "",
+      "afterHelp": "", 
+      "args": [],
+      "subcommands": {
+        "subcommand-name": {
+          
+        }
+      }
     },
     "security": {
       "csp": null

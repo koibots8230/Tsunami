@@ -1,42 +1,11 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::{error::Error, sync::Mutex};
+mod settings;
+mod robot;
 
-use confy::{load, store};
-use ds::{DriverStation, Alliance};
-use serde_derive::{Serialize, Deserialize};
+use std::error::Error;
 use tauri::{Menu, Manager};
-
-struct DS(Mutex<DriverStation>);
-struct Settings(Mutex<TsunamiConfig>);
-
-#[derive(Debug, Serialize, Deserialize)]
-struct TsunamiConfig {
-    team_number: u32,
-    alliance: u8
-}
-
-impl Default for TsunamiConfig {
-    fn default() -> Self {
-        TsunamiConfig {
-            team_number: 8230,
-            alliance: 1,
-        }
-    }
-}
-
-#[tauri::command]
-fn enable(ds: tauri::State<'_, DS>) -> () {
-    let _ = &ds.0.lock().unwrap().enable();
-}
-
-#[tauri::command]
-fn save_settings(cfg: tauri::State<Settings>) -> () {
-    let _ = store("Tsunami", "Global", cfg.0.lock().as_deref().unwrap().to_owned());
-
-    
-} 
 
 fn try_main() -> Result<(), Box<dyn Error>> {
     let menu: Menu = Menu::os_default("Tsunami");
@@ -67,12 +36,23 @@ fn try_main() -> Result<(), Box<dyn Error>> {
 
             Ok(())
         })
-        .manage(DS(Mutex::new(DriverStation::new("172.0.0.1", Alliance(1), 8230))))
-        .manage(Settings(load("Tsunami", "Global")?))
+        .manage(robot::DriverStationState)
+        .manage(settings::GlobalSettings)
         .invoke_handler(tauri::generate_handler![
             // Add tauri commands here.
-            enable,
-            save_settings,
+            crate::robot::disable,
+            crate::robot::enable,
+            crate::robot::estop,
+            crate::robot::restart_code,
+            crate::robot::battery_voltage,
+            //crate::robot::ds_mode,
+            crate::robot::enabled,
+            crate::robot::estopped,
+            //crate::robot::mode,
+            crate::robot::team_number,
+            //crate::robot::udp_queue,
+            crate::robot::restart_roborio,
+            crate::settings::save_settings,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -81,5 +61,5 @@ fn try_main() -> Result<(), Box<dyn Error>> {
 }
 
 fn main() {
-    try_main().unwrap();
+    try_main().unwrap(); // Panics if there is an Error
 }
