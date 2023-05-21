@@ -39,20 +39,22 @@ fn try_main() -> Result<(), Box<dyn Error>> {
         .manage(robot::DriverStationState)
         .manage(settings::GlobalSettings)
         .invoke_handler(tauri::generate_handler![
-            // Add tauri commands here.
-            crate::robot::disable,
-            crate::robot::enable,
-            crate::robot::estop,
-            crate::robot::restart_code,
-            crate::robot::battery_voltage,
-            //crate::robot::ds_mode,
-            crate::robot::enabled,
-            crate::robot::estopped,
-            //crate::robot::mode,
-            crate::robot::team_number,
-            //crate::robot::udp_queue,
-            crate::robot::restart_roborio,
-            crate::settings::save_settings,
+         // Add tauri commands here.
+            robot::disable,
+            robot::enable,
+            robot::estop,
+            robot::restart_code,
+            robot::battery_voltage,
+            //robot::ds_mode,
+            robot::enabled,
+            robot::estopped,
+            //robot::mode,
+            robot::team_number,
+            //robot::udp_queue,
+            robot::set_team_number,
+            robot::set_use_usb,
+            robot::restart_roborio,
+            settings::save_settings,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

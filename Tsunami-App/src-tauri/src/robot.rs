@@ -25,9 +25,9 @@ ds_tauri!(restart_code);
 ds_tauri!(restart_roborio);
 
 macro_rules! ds_tauri_getter {
-    ($func:ident, $typ:ty) => {
+    ($func:ident, $res:ty) => {
         #[tauri::command]
-        pub fn $func(ds: tauri::State<'_, DriverStationState>) -> $typ {
+        pub fn $func(ds: tauri::State<'_, DriverStationState>) -> $res {
             return ds.0.lock().unwrap().$func();
         }
     };
@@ -39,3 +39,15 @@ ds_tauri_getter!(enabled, bool);
 ds_tauri_getter!(estopped, bool);
 ds_tauri_getter!(team_number, u32);
 //ds_tauri_getter!(udp_queue, Vec<UdpTag>); Can't Serialize/Deserialize
+
+macro_rules! ds_tauri_setter {
+    ($func:ident, $param:ty) => {
+        #[tauri::command]
+        pub fn $func(ds: tauri::State<'_, DriverStationState>, val: $param) -> () {
+            return ds.0.lock().unwrap().$func(val);
+        }
+    };
+}
+
+ds_tauri_setter!(set_team_number, u32);
+ds_tauri_setter!(set_use_usb, bool);

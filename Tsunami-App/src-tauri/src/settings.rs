@@ -30,3 +30,20 @@ impl Default for TsunamiConfig {
 pub fn save_settings(cfg: tauri::State<GlobalSettings>) -> () {
     let _ = store("Tsunami", "Global", cfg.0.lock().as_deref().unwrap().to_owned());
 } 
+
+
+/* 
+ tauri.conf.json for settings window 
+
+       {
+        "label": "settings",
+        "fullscreen": false,
+        "center": true,
+        "resizable": false,
+        "title": "Tsunami: Settings",
+        "focus": true,
+        "decorations": false,
+        "titleBarStyle": "Transparent"
+      }
+
+ */

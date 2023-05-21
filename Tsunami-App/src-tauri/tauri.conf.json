@@ -11,6 +11,7 @@
     "version": "0.0.0"
   },
   "tauri": {
+    
     "allowlist": {
       "all": false,
       "app": {
@@ -47,10 +48,18 @@
         "icons/icon.ico"
       ],
       "identifier": "com.koibots.tsunami",
-      "targets": "all"
+      "targets": "all",
+      "resources": ["../resources"],
+      "copyright": "© 2023 KoiBots 8230",
+      "category": "DeveloperTool",
+      "shortDescription": "Tsunami is a cross-platform DriverStation app for the FIRST Robotics Competition.",
+      "longDescription": "Tsunami is a cross-platform replacement for DriverStation and Shuffleboard made by the KoiBots FRC team #8230.",
+      "appimage": {
+        "bundleMediaFramework": false
+      }
     },
     "cli": {
-      "description": "",
+      "description": "Tsunami allows the use of the CLI to enable the robot and run autonomous routines.",
       "longDescription": "",
       "beforeHelp": "",
       "afterHelp": "", 
@@ -69,9 +78,13 @@
     },
     "windows": [
       {
+        "label": "main",
         "fullscreen": true,
         "resizable": true,
-        "title": "Tsunami"
+        "title": "Tsunami",
+        "focus": true,
+        "decorations": false,
+        "titleBarStyle": "Transparent"
       }
     ]
   }
