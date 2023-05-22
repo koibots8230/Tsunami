@@ -1,25 +1,26 @@
 
 use std::sync::Mutex;
+use std::ops::Deref;
 use serde_derive::{Serialize, Deserialize};
 use confy::{store, load};
 
-pub struct GlobalSettings(pub Mutex<TsunamiConfig>);
+pub struct GlobalSettings(pub Mutex<TsunamiGlobalConfig>);
 
 impl Default for GlobalSettings {
     fn default() -> Self {
-        return GlobalSettings(Mutex::new(load("Tsunami", "Global").unwrap()));
+        return GlobalSettings(Mutex::new(load("Tsunami", "Global").unwrap_or_default()));
     }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct TsunamiConfig {
+pub struct TsunamiGlobalConfig {
     team_number: u32,
     alliance: u8
 }
 
-impl Default for TsunamiConfig {
+impl Default for TsunamiGlobalConfig {
     fn default() -> Self {
-        TsunamiConfig {
+        TsunamiGlobalConfig {
             team_number: 8230,
             alliance: 1,
         }
@@ -30,6 +31,11 @@ impl Default for TsunamiConfig {
 pub fn save_settings(cfg: tauri::State<GlobalSettings>) -> () {
     let _ = store("Tsunami", "Global", cfg.0.lock().as_deref().unwrap().to_owned());
 } 
+
+#[tauri::command]
+pub fn get_global_settings(cfg: tauri::State<GlobalSettings>) -> TsunamiGlobalConfig {
+    return cfg.0.lock().as_deref().unwrap();
+}
 
 
 /* 

@@ -32,7 +32,6 @@ fn try_main() -> Result<(), Box<dyn Error>> {
             }
         })
         .setup(|app| {
-            app.emit_all("Global-Settings-Loaded", "project found").unwrap();
 
             Ok(())
         })
@@ -63,5 +62,5 @@ fn try_main() -> Result<(), Box<dyn Error>> {
 }
 
 fn main() {
-    try_main().unwrap(); // Panics if there is an Error
+    try_main().unwrap(); // Panics if there is an error.
 }

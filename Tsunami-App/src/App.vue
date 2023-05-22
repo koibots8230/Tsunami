@@ -4,6 +4,7 @@
 
 import { open } from "@tauri-apps/api/dialog"
 import { homeDir } from "@tauri-apps/api/path"
+import { invoke } from "@tauri-apps/api/tauri"
 
 async function dialog() {
   console.log(await open({
@@ -18,8 +19,14 @@ async function dialog() {
   }));
 }
 
+enum GlobalSettings{
+  
+}
+
+invoke("load_global_config")
+
 </script>
 
 <template>
-    <button @click="dialog()">Dialog</button>
+    
 </template>
