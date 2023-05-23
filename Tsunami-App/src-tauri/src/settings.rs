@@ -1,6 +1,5 @@
 
 use std::sync::Mutex;
-use std::ops::Deref;
 use serde_derive::{Serialize, Deserialize};
 use confy::{store, load};
 
@@ -33,8 +32,8 @@ pub fn save_settings(cfg: tauri::State<GlobalSettings>) -> () {
 } 
 
 #[tauri::command]
-pub fn get_global_settings(cfg: tauri::State<GlobalSettings>) -> TsunamiGlobalConfig {
-    return cfg.0.lock().as_deref().unwrap();
+pub fn get_global_team_number(cfg: tauri::State<GlobalSettings>) -> u32 {
+    return cfg.0.lock().as_deref().unwrap().to_owned().team_number;
 }
 
 

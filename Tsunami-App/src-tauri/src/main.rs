@@ -1,21 +1,22 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod settings;
+mod nt;
 mod robot;
+mod settings;
 
 use std::error::Error;
-use tauri::{Menu, Manager};
+use tauri::{Manager, Menu};
 
 fn try_main() -> Result<(), Box<dyn Error>> {
     let menu: Menu = Menu::os_default("Tsunami");
 
     tauri::Builder::default()
         //.menu(menu)
-        .enable_macos_default_menu(false) // Already added with Menu::os_default(). 
+        .enable_macos_default_menu(false) // Already added with Menu::os_default().
         .menu(menu)
         .on_window_event(|event| match event.event() {
-            /* 
+            /*
             tauri::WindowEvent::CloseRequested { api, .. } => todo!(),
             tauri::WindowEvent::Destroyed{} => todo!(),
             tauri::WindowEvent::FileDrop(file_dropped) => todo!(),
@@ -26,19 +27,19 @@ fn try_main() -> Result<(), Box<dyn Error>> {
             */
             _ => {}
         })
-        .on_menu_event(|event| {
-            match event.menu_item_id() {
-              _ => {}
-            }
+        .on_menu_event(|event| match event.menu_item_id() {
+            _ => {}
         })
         .setup(|app| {
+            app.emit_all("Foo", "Bar").unwrap();
 
             Ok(())
         })
         .manage(robot::DriverStationState)
         .manage(settings::GlobalSettings)
+        .manage(nt::NetworkTables)
         .invoke_handler(tauri::generate_handler![
-         // Add tauri commands here.
+            // Add tauri commands here.
             robot::disable,
             robot::enable,
             robot::estop,
@@ -54,6 +55,7 @@ fn try_main() -> Result<(), Box<dyn Error>> {
             robot::set_use_usb,
             robot::restart_roborio,
             settings::save_settings,
+            settings::get_global_team_number,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
