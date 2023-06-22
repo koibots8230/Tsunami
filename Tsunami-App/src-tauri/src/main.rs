@@ -1,68 +1,10 @@
-// Prevents additional console window on Windows in release, DO NOT REMOVE!!
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-
-mod nt;
-mod robot;
-mod settings;
-
-use std::error::Error;
-use tauri::{Manager, Menu};
-
-fn try_main() -> Result<(), Box<dyn Error>> {
-    let menu: Menu = Menu::os_default("Tsunami");
-
-    tauri::Builder::default()
-        //.menu(menu)
-        .enable_macos_default_menu(false) // Already added with Menu::os_default().
-        .menu(menu)
-        .on_window_event(|event| match event.event() {
-            /*
-            tauri::WindowEvent::CloseRequested { api, .. } => todo!(),
-            tauri::WindowEvent::Destroyed{} => todo!(),
-            tauri::WindowEvent::FileDrop(file_dropped) => todo!(),
-            tauri::WindowEvent::Focused(focused) => todo!(),
-            tauri::WindowEvent::Moved(position) => todo!(),
-            tauri::WindowEvent::Resized(size) => todo!(),
-            tauri::WindowEvent::ThemeChanged(theme) => todo!(),
-            */
-            _ => {}
-        })
-        .on_menu_event(|event| match event.menu_item_id() {
-            _ => {}
-        })
-        .setup(|app| {
-            app.emit_all("Foo", "Bar").unwrap();
-
-            Ok(())
-        })
-        .manage(robot::DriverStationState)
-        .manage(settings::GlobalSettings)
-        .manage(nt::NetworkTables)
-        .invoke_handler(tauri::generate_handler![
-            // Add tauri commands here.
-            robot::disable,
-            robot::enable,
-            robot::estop,
-            robot::restart_code,
-            robot::battery_voltage,
-            //robot::ds_mode,
-            robot::enabled,
-            robot::estopped,
-            //robot::mode,
-            robot::team_number,
-            //robot::udp_queue,
-            robot::set_team_number,
-            robot::set_use_usb,
-            robot::restart_roborio,
-            settings::save_settings,
-            settings::get_global_team_number,
-        ])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
-
-    Ok(())
-}
+#![cfg_attr(
+  all(not(debug_assertions), target_os = "windows"),
+  windows_subsystem = "windows"
+)]
 
 fn main() {
-    try_main().unwrap(); // Panics if there is an error.
+  tauri::Builder::default()
+    .run(tauri::generate_context!())
+    .expect("error while running tauri application");
 }

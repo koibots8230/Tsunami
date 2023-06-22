@@ -1,45 +1,34 @@
 {
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
-    "beforeDevCommand": "npm run dev",
-    "beforeBuildCommand": "npm run build",
-    "devPath": "http://localhost:1420",
-    "distDir": "../dist",
-    "withGlobalTauri": false
+    "beforeBuildCommand": "npm run dev",
+    "beforeDevCommand": "npm run build",
+    "devPath": "http://localhost:8080",
+    "distDir": "../dist"
   },
   "package": {
-    "productName": "Tsunami",
-    "version": "0.0.0"
+    "productName": "tsunami",
+    "version": "0.1.0"
   },
   "tauri": {
-    
     "allowlist": {
-      "all": false,
-      "app": {
+      "http": {
         "all": true,
-        "show": true,
-        "hide": true
-      },
-      "shell": {
-        "all": false,
-        "open": true
-      },
-      "dialog": {
-        "all": true,
-        "ask": true,
-        "confirm": true,
-        "message": true, 
-        "open": true,
-        "save": true
-      },
-      "os": {
-        "all": true
-      },
-      "path": {
-        "all": true
+        "request": true,
+        "scope": [
+          "https://**",
+          "http://**"
+        ]
       }
     },
     "bundle": {
       "active": true,
+      "category": "DeveloperTool",
+      "copyright": "",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -47,15 +36,22 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.koibots.tsunami",
+      "identifier": "com.khoshghadam.vite-tauri",
+      "longDescription": "",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "resources": [],
+      "shortDescription": "",
       "targets": "all",
-    
-      "copyright": "© 2023 KoiBots 8230",
-      "category": "DeveloperTool",
-      "shortDescription": "Tsunami is a cross-platform DriverStation app for the FIRST Robotics Competition.",
-      "longDescription": "Tsunami is a cross-platform replacement for DriverStation and Shuffleboard made by the KoiBots FRC team #8230.",
-      "appimage": {
-        "bundleMediaFramework": false
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
       }
     },
     "security": {
@@ -66,13 +62,11 @@
     },
     "windows": [
       {
-        "label": "main",
-        "fullscreen": true,
+        "fullscreen": false,
+        "height": 600,
         "resizable": true,
-        "title": "Tsunami",
-        "focus": true,
-        "decorations": false,
-        "titleBarStyle": "Transparent"
+        "title": "Vite Tauri Template",
+        "width": 800
       }
     ]
   }
